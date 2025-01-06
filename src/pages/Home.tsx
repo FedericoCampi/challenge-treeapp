@@ -18,7 +18,12 @@ const Home: React.FC = () => {
   return (
     <div>
       <h1>Tree Page</h1>
-      <Switch checked={editable} onChange={() => setEditable(!editable)} />
+      <div className="divSwitch">
+        <p>Editar</p>
+        <Switch checked={editable} onChange={() => setEditable(!editable)} />
+        
+      </div>
+      
 
       <Tree
         title="Tree Example"

@@ -29,6 +29,10 @@ Incluye pruebas E2E con Cypress para validar su funcionalidad.
 
 ---
 
+## Url de aplicación desplegada en Vercel
+
+  https://challenge-treeapp.vercel.app/
+
 ## Test E2E con cypress
 
   ```bash
