@@ -3,11 +3,11 @@ import { IconButton, TextField } from "@mui/material";
 import { Add, Delete, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { TreeNodeProps, TreeNodeType } from "../types/types";
 
-const TreeNode: React.FC<TreeNodeProps> = ({ node, editable, onAdd, onDelete, expandAll  }) => {
+const TreeNode: React.FC<TreeNodeProps> = ({ node, editable, onAdd, onDelete, expandAll }) => {
 
-  const [isExpanded, setIsExpanded] = useState(true); 
-  const [isAdding, setIsAdding] = useState(false); 
-  const [newNodeName, setNewNodeName] = useState(""); 
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
+  const [newNodeName, setNewNodeName] = useState("");
 
   const handleAdd = () => {
 
@@ -15,12 +15,12 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, editable, onAdd, onDelete, ex
     if (newNodeName.trim()) {
 
       // Llama a la función `onAdd` pasando el ID del nodo actual y el nombre del nuevo nodo.
-      onAdd(node.id, newNodeName); 
+      onAdd(node.id, newNodeName);
 
-      setNewNodeName(""); 
-      
+      setNewNodeName("");
+
       // Cierra el formulario de adición.
-      setIsAdding(false); 
+      setIsAdding(false);
     }
   };
 
@@ -31,11 +31,11 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, editable, onAdd, onDelete, ex
   return (
     <li>
       <div>
-      {node.children && node.id !== "root" && (
-  <IconButton onClick={() => setIsExpanded(!isExpanded)}>
-    {isExpanded ? <ExpandLess /> : <ExpandMore />}
-  </IconButton>
-)}
+        {node.children && node.id !== "root" && (
+          <IconButton onClick={() => setIsExpanded(!isExpanded)}>
+            {isExpanded ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
+        )}
         {node.name}
         {editable && (
           <>
@@ -57,7 +57,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, editable, onAdd, onDelete, ex
             onChange={(e) => setNewNodeName(e.target.value)}
             size="small"
           />
-          <button onClick={handleAdd}>Add</button>
+          <button onClick={handleAdd}>Agregar</button>
           <button onClick={() => setIsAdding(false)}>Cancel</button>
         </div>
       )}

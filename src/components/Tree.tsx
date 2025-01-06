@@ -82,7 +82,7 @@ const Tree: React.FC<TreeProps> = ({ title, value, onChange, editable }) => {
   };
 
   return (
-    <div>
+    <div className="containerTree">
       <button onClick={toggleExpandAll}>
         {expandAll ? "Colapsar Todos" : "Expandir Todos"}
       </button>
