@@ -6,8 +6,13 @@ import About from "../pages/About";
 const AppRoutes: React.FC = () => (
   <Router>
     <nav>
-      <Link to="/">Home</Link>
-      <Link to="/about">About</Link>
+      <Link to="/">
+      <button>Home</button>
+        
+        </Link>
+      <Link to="/about">
+        <button>About</button>
+      </Link>
     </nav>
     <Routes>
       <Route path="/" element={<Home />} />

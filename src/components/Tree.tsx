@@ -1,74 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
 import TreeNode from "./TreeNode";
-
-interface TreeProps {
-  title: string;
-  value: any;
-  onChange: (value: any) => void;
-  editable: boolean;
-}
+import { TreeNodeType, TreeProps } from "../types/types";
+import { Alert, Snackbar } from "@mui/material";
 
 const Tree: React.FC<TreeProps> = ({ title, value, onChange, editable }) => {
 
-  const handleAdd = (parentId: string, name: string) => {
-    // Maneja la adición de un nuevo nodo hijo a un nodo existente.
-    const newValue = JSON.parse(JSON.stringify(value)); 
-    // Crea una copia profunda del árbol para evitar mutaciones directas.
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [expandAll, setExpandAll] = useState(true);
 
-    const findNode = (node: any): any => {
-      // Función recursiva para buscar un nodo por su ID.
+  const showSnackbar = (message: string) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleAdd = (parentId: string, name: string) => {
+    // Crea una copia profunda del árbol para evitar mutaciones directas.
+    const newValue = JSON.parse(JSON.stringify(value)); 
+
+    // Función recursiva para buscar un nodo por su ID.
+    const findNode = (node: TreeNodeType): TreeNodeType | null => {
+      
+      // Devuelve el nodo si el ID coincide con el `parentId` o sigue buscando.
       if (node.id === parentId) {
-        // Devuelve el nodo si el ID coincide con el `parentId`.
         return node;
       }
+
       for (let child of node.children || []) {
-        // Itera sobre los hijos del nodo actual.
-        const found = findNode(child); 
+        
         // Llama recursivamente para buscar en los hijos.
+        const found = findNode(child); 
+        
         if (found) return found; 
-        // Devuelve el nodo encontrado si coincide.
       }
       return null; 
-      // Devuelve null si no encuentra el nodo en este nivel.
     };
 
+     // Encuentra el nodo padre al que se le agregará el nuevo hijo.
     const parentNode = findNode(newValue); 
-    // Encuentra el nodo padre al que se le agregará el nuevo hijo.
+
+    if (!parentNode) {
+      console.error("Nodo padre no encontrado");
+      return;
+    }
 
     parentNode.children = [
-      ...(parentNode.children || []), 
       // Asegura que `children` sea un array y agrega el nuevo hijo.
-      { id: Date.now().toString(), name, children: [] } 
+      ...(parentNode.children || []), 
       // Crea un nuevo nodo hijo con un ID único, nombre y un array vacío de hijos.
+      { id: Date.now().toString(), name, children: [] } 
     ];
 
-    onChange(newValue); 
-    // Llama a `onChange` con la nueva estructura del árbol.
+    onChange(newValue);
+    showSnackbar(`Nodo "${name}" agregado correctamente.`);
   };
 
   const handleDelete = (id: string) => {
-    // Maneja la eliminación de un nodo por su ID.
-    const newValue = JSON.parse(JSON.stringify(value)); 
-    // Crea una copia profunda del árbol para evitar mutaciones directas.
 
-    const removeNode = (nodes: any[], nodeId: string): any[] =>
-      // Función recursiva para eliminar un nodo y sus hijos.
+    // Crea una copia profunda del árbol para evitar mutaciones directas.
+    const newValue = JSON.parse(JSON.stringify(value)); 
+    
+    // Función recursiva para eliminar un nodo y sus hijos.
+    const removeNode = (nodes: TreeNodeType[], nodeId: string): TreeNodeType[] =>
       nodes
-        .filter((node: any) => node.id !== nodeId) 
         // Filtra los nodos para excluir el nodo con el ID dado.
-        .map((node: any) => ({
+        .filter((node: TreeNodeType) => node.id !== nodeId)
+        // Copia el nodo actual.
+        .map((node: TreeNodeType) => ({
           ...node, 
-          // Copia el nodo actual.
-          children: removeNode(node.children || [], nodeId) 
+
           // Llama recursivamente para procesar los hijos.
-        }));
+          children: removeNode(node.children || [], nodeId) 
+      }));
 
     onChange({ ...newValue, children: removeNode(newValue.children || [], id) });
-    // Actualiza el árbol con los nodos modificados.
+    showSnackbar("Nodo eliminado correctamente.");
+  };
+
+  const toggleExpandAll = () => {
+    setExpandAll((prev) => !prev);
   };
 
   return (
     <div>
+      <button onClick={toggleExpandAll}>
+        {expandAll ? "Colapsar Todos" : "Expandir Todos"}
+      </button>
       <h3>{title}</h3> 
       <ul>
         <TreeNode
@@ -76,7 +93,19 @@ const Tree: React.FC<TreeProps> = ({ title, value, onChange, editable }) => {
           editable={editable} 
           onAdd={handleAdd} 
           onDelete={handleDelete} 
+          expandAll={expandAll}
         />
+
+    <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       </ul>
     </div>
   );

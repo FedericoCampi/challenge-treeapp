@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #8b8b8b;
+  background-color: #4e4e4e;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,9 +25,11 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  justify-content: center;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #8b8b8b;
 }
 
 h1 {
@@ -54,6 +56,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+nav{
+  display: flex;
+  justify-content: space-around;
+}
+
+.aboutSection{
+  padding-top: 30px;
+  max-width: 700px;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
