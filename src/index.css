@@ -25,11 +25,13 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  place-items: center;
+  justify-content: start;
+  place-items: start;
   min-width: 320px;
   min-height: 100vh;
   background-color: #8b8b8b;
+  padding-top: 50px;
+  padding-left: 50px;
 }
 
 h1 {
@@ -59,6 +61,7 @@ button:focus-visible {
 nav{
   display: flex;
   justify-content: space-around;
+  width: 500px;
 }
 
 .aboutSection{
